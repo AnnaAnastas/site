@@ -25,6 +25,8 @@ img{max-width:100%;display:block}
 .wrap{max-width:1140px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right))}
 h1,h2,h3{font-family:Montserrat,Manrope,sans-serif;letter-spacing:-.3px}
 .blue{color:var(--blue2)}
+.flow{display:inline-flex;flex-wrap:wrap;gap:6px 10px;align-items:center;background:var(--ice);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:8px 16px;font-size:14px;font-weight:600;margin-bottom:16px}
+.flow b{color:#fff;background:linear-gradient(135deg,var(--blue),var(--sky));border-radius:999px;padding:2px 10px}
 
 /* м'які сині хвилі на фоні */
 .waves{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
@@ -179,7 +181,7 @@ footer a{color:var(--blue)}
   <div class="wrap">
     <a class="logo" href="#"><b>✓</b><span>Комерційна нерухомість</span></a>
     <nav class="nav"><a href="#who">Для кого</a><a href="#program">Програма</a><a href="#result">Результат</a><a href="#faq">Питання</a></nav>
-    <div class="timer"><span class="lb" id="lb">Встигніть забронювати місце</span><div class="t" id="t"></div></div>
+    <div class="timer"><span class="lb" id="lb">До старту потоку №2</span><div class="t" id="t"></div></div>
     <a class="btn btn-blue" href="https://t.me/Realtor_education_bot?start=int">Забронювати місце</a>
   </div>
 </div>
@@ -187,9 +189,10 @@ footer a{color:var(--blue)}
 <header class="hero">
   <div class="wrap">
     <div>
+      <div class="flow rv"><b>Потік №2</b><span>По ваших заявках · 26, 27, 28 листопада · 18:00 · Zoom</span></div>
       <h1 class="rv">Комерційна нерухомість: <span class="blue">перші кроки</span> і система роботи за 3 дні</h1>
       <p class="lead rv d1">Три живі заняття в Zoom: <b>від житлової до комерційної</b>, пошук об'єктів і власників, <b>план на 30 днів</b> і як розпізнати клієнта, з яким варто працювати</p>
-      <div class="cta rv d2"><a class="btn btn-blue" href="https://t.me/Realtor_education_bot?start=int">Хочу на інтенсив</a></div>
+      <div class="cta rv d2"><a class="btn btn-blue" href="https://t.me/Realtor_education_bot?start=int">Хочу в потік №2</a></div>
       <div class="feats rv d3">
         <div><i>✓</i>Три живі заняття в Zoom, по одному щодня</div>
         <div><i>⚡</i>Практика наприкінці кожного дня</div>
@@ -291,7 +294,8 @@ footer a{color:var(--blue)}
 
 <script>
 /* Дата, до якої йде відлік (за Києвом), формат "2026-11-20 19:00". Порожньо = замість цифр напис «Набір відкрито». */
-var DEADLINE = "";
+var DEADLINE = "2026-11-26 18:00";
+var LIVE_UNTIL = "2026-11-28 21:00";  /* потік №2 іде: приєднатися ще можна */
 (function(){
   var top=document.getElementById('top');
   function onScroll(){ top.classList.toggle('sc', window.scrollY > 380); }
@@ -302,8 +306,11 @@ var DEADLINE = "";
   else{
     var end=new Date(DEADLINE.replace(' ','T')+':00+02:00').getTime();
     var p=function(n){return (n<10?'0':'')+n};
+    var live=new Date(LIVE_UNTIL.replace(' ','T')+':00+02:00').getTime();
     var tick=function(){
       var s=Math.max(0,Math.floor((end-Date.now())/1000));
+      if(s===0){ document.getElementById('lb').textContent=Date.now()<live?'Потік №2 уже йде':'Набір відкрито';
+        t.innerHTML='<span style="min-width:0;padding:3px 10px">'+(Date.now()<live?'Ще можна приєднатися':'Пишіть в агента')+'</span>'; return; }
       t.innerHTML='<span>'+Math.floor(s/86400)+'<small>ДН</small></span><span>'+p(Math.floor(s%86400/3600))+'<small>ГОД</small></span><span>'+p(Math.floor(s%3600/60))+'<small>ХВ</small></span><span>'+p(s%60)+'<small>СЕК</small></span>';
     };
     tick(); setInterval(tick,1000);
